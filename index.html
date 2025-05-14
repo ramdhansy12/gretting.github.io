@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Happy Anniversary!</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      color: #333;
+      margin: 0;
+      padding: 1rem;
+    }
+    h1 {
+      font-size: 3rem;
+      margin: 1rem 0 0.5rem;
+    }
+    .names {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .date {
+      font-size: 1rem;
+      color: #ffe;
+      margin-bottom: 2rem;
+    }
+    .heart {
+      font-size: 4rem;
+      color: red;
+      animation: pulse 1.5s infinite;
+    }
+    .message {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 1rem auto 2rem;
+      opacity: 0;
+      transition: 1s ease;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 1rem;
+      background: #fff;
+      color: #f76b1c;
+      border: none;
+      border-radius: 30px;
+      margin: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #ffe3c5;
+    }
+
+    .slideshow-container {
+      width: 100%;
+      max-width: 500px;
+      margin: auto;
+      position: relative;
+    }
+    .slides {
+      display: none;
+      width: 100%;
+      height: auto;
+      border-radius: 15px;
+      object-fit: cover;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .message {
+      margin-top: 1rem;
+      font-size: 1rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 1rem;
+    }
+
+    /* Confetti canvas as background */
+    canvas#confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="heart">❤️</div>
+  <h1>Happy 1st Anniversary!</h1>
+  <div class="date">18 Mei 2024 — 18 Mei 2025</div>
+
+  <div class="slideshow-container">
+    <img class="slides" src="https://i.imgur.com/aVylcdD.jpeg" alt="Foto 1">
+    <img class="slides" src="https://i.imgur.com/yiz52wb.jpeg" alt="Foto 2">
+    <img class="slides" src="https://i.imgur.com/gw7TIa3.jpeg" alt="Foto 3">
+    <img class="slides" src="https://i.imgur.com/r7W7HvO.jpeg" alt="Foto 4">
+    <img class="slides" src="https://i.imgur.com/MaoJCcL.jpeg" alt="Foto 5">
+    <img class="slides" src="https://i.imgur.com/jVGncMj.jpeg" alt="Foto 6">
+    <img class="slides" src="https://i.imgur.com/t7ll1Ap.jpeg" alt="Foto 7">
+    <img class="slides" src="https://i.imgur.com/63fow81.jpeg" alt="Foto 8">
+    <img class="slides" src="https://i.imgur.com/020311G.jpeg" alt="Foto 9">
+    <img class="slides" src="https://i.imgur.com/lfoYULg.jpeg" alt="Foto 10">
+  </div>
+
+  <div class="message" id="msg">
+    Setahun sudah kita bersama, tertawa, tumbuh, dan saling mendukung. 
+    Terima kasih atas cinta dan kenangan yang indah. Mari kita teruskan kisah ini, selamanya. 💞
+  </div>
+
+  <button onclick="showMessage()">💌 Baca Pesan</button>
+  <button onclick="playMusic()">🎶 Putar Musik</button>
+
+  <audio id="bg-music" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+    Browser kamu tidak mendukung audio.
+  </audio>
+
+  <script>
+    // Slideshow logic
+    let slideIndex = 0;
+    const slides = document.getElementsByClassName("slides");
+    function showSlides() {
+      for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
+      slideIndex++;
+      if (slideIndex > slides.length) slideIndex = 1;
+      slides[slideIndex - 1].style.display = "block";
+      setTimeout(showSlides, 5500);
+    }
+    showSlides();
+
+    function showMessage() {
+      document.getElementById("msg").style.opacity = 1;
+    }
+
+    function playMusic() {
+      document.getElementById("bg-music").play();
+    }
+
+    // Confetti
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const confetti = Array.from({length: 100}, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      r: Math.random() * 6 + 4,
+      d: Math.random() * 100,
+      color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+      tilt: Math.random() * 10 - 5,
+      tiltAngle: 0
+    }));
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(c => {
+        ctx.beginPath();
+        ctx.lineWidth = c.r;
+        ctx.strokeStyle = c.color;
+        ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
+        ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r);
+        ctx.stroke();
+      });
+      updateConfetti();
+      requestAnimationFrame(drawConfetti);
+    }
+
+    function updateConfetti() {
+      confetti.forEach(c => {
+        c.y += Math.cos(c.d) + 1 + c.r / 2;
+        c.x += Math.sin(c.d);
+        c.tiltAngle += 0.1;
+        c.tilt = Math.sin(c.tiltAngle) * 15;
+        if (c.y > canvas.height) {
+          c.y = -10;
+          c.x = Math.random() * canvas.width;
+        }
+      });
+    }
+
+    drawConfetti();
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
